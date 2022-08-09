@@ -1,3 +1,4 @@
+#%%
 # Python program to create Blockchain
 
 # For timestamp
@@ -22,7 +23,7 @@ class Blockchain:
 
 	# This function is created
 	# to create the very first
-	# block and set it's hash to "0"
+	# block and set its hash to "0"
 	def __init__(self):
 		self.chain = []
 		self.create_block(proof=1, previous_hash='0')
@@ -57,7 +58,7 @@ class Blockchain:
 			else:
 				new_proof += 1
 				
-		return new_proof
+		return hash_operation, new_proof
 
 	def hash(self, block):
 		encoded_block = json.dumps(block, sort_keys=True).encode()
@@ -98,7 +99,7 @@ blockchain = Blockchain()
 def mine_block():
 	previous_block = blockchain.print_previous_block()
 	previous_proof = previous_block['proof']
-	proof = blockchain.proof_of_work(previous_proof)
+	pow_hash, proof = blockchain.proof_of_work(previous_proof)
 	previous_hash = blockchain.hash(previous_block)
 	block = blockchain.create_block(proof, previous_hash)
 	
@@ -106,7 +107,8 @@ def mine_block():
 				'index': block['index'],
 				'timestamp': block['timestamp'],
 				'proof': block['proof'],
-				'previous_hash': block['previous_hash']}
+				'previous_hash': block['previous_hash'],
+				'pow_hash': pow_hash}
 	
 	return jsonify(response), 200
 
@@ -131,3 +133,5 @@ def valid():
 
 # Run the flask server locally
 app.run(host='127.0.0.1', port=5000)
+
+# %%
